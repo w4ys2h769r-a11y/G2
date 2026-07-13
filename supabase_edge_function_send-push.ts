@@ -24,6 +24,7 @@ Deno.serve(async (req) => {
     let title = "G2 CONNECT";
     let body = "Nouvelle notification";
     let targetAgentId: string | null = null;
+    let type = "consigne";
 
     if (table === "consignes") {
       title = record.type === "générale"
@@ -31,9 +32,11 @@ Deno.serve(async (req) => {
         : "📋 Nouvelle consigne individuelle";
       body = record.titre || "Consultez l'application G2 Connect";
       if (record.type === "individuelle") targetAgentId = record.agentId;
+      type = "consigne";
     } else if (table === "panic_events") {
       title = "🚨 ALERTE URGENTE";
       body = (record.name || "Un agent") + " a déclenché une alerte";
+      type = "panic";
     } else {
       return new Response(JSON.stringify({ skipped: true }), {
         headers: { "Content-Type": "application/json" },
@@ -55,7 +58,7 @@ Deno.serve(async (req) => {
       (subs || []).map((s: any) =>
         webpush.sendNotification(
           { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
-          JSON.stringify({ title, body })
+          JSON.stringify({ title, body, type })
         )
       )
     );
