@@ -1,0 +1,25 @@
+{
+  "name": "G2 Connect",
+  "short_name": "G2 Connect",
+  "description": "Application de gestion de la Brigade G2",
+  "start_url": "/G2/",
+  "scope": "/G2/",
+  "display": "standalone",
+  "background_color": "#001a8d",
+  "theme_color": "#001a8d",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/G2/connexion-g2-background.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/G2/connexion-g2-background.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

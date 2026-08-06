@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>G2 Connect - Application Finale</title>
+
+<link rel="stylesheet" href="/G2/styles.css">
+<link rel="manifest" href="/G2/manifest.json">
+<meta name="theme-color" content="#001a8d">
+<!-- Balises requises par iOS/Safari pour que l'ajout à l'écran d'accueil
+     fonctionne comme une vraie PWA (nécessaire pour les notifications push
+     quand l'application est fermée, depuis iOS 16.4) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="G2 Connect">
+<link rel="apple-touch-icon" href="/G2/connexion-g2-background.png">
+</head>
+<body>
+<div id="root"></div>
+
+<!-- Module optionnel retire pour stabiliser l'application (script 6) -->
+
+<!-- Module optionnel retire pour stabiliser l'application (script 7) -->
+
+<!-- Module optionnel retire pour stabiliser l'application (script 10) -->
+
+<!-- Module optionnel retire pour stabiliser l'application (script 11) -->
+
+<!-- Module optionnel retire pour stabiliser l'application (script 14) -->
+
+<!-- Module optionnel retire pour stabiliser l'application (script 15) -->
+
+<!-- Module optionnel retire pour stabiliser l'application (script 17) -->
+
+<!-- Module optionnel retire pour stabiliser l'application (script 19) -->
+
+<!-- Bandeau tableau de bord consolide dans le script final -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  // Cache-busting automatique : force le navigateur à toujours récupérer
+  // la dernière version de app.js, sans jamais avoir besoin de vider le
+  // cache manuellement après un déploiement.
+  var s = document.createElement('script');
+  s.type = 'module';
+  s.src = '/G2/app.js?v=' + Date.now();
+  document.body.appendChild(s);
+</script>
+</body>
+</html>
