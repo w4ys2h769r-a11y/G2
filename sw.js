@@ -15,9 +15,23 @@ self.addEventListener('push', function(event) {
     vibrate: isPanic ? panicVibrate : [200, 100, 200],
     tag: isPanic ? 'g2-panic-notification' : 'g2-connect-notification',
     renotify: true,
-    requireInteraction: isPanic
+    requireInteraction: isPanic,
+    silent: false
   };
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil((async () => {
+    await self.registration.showNotification(title, options);
+    // Pastille sur l'icône de l'app (fonctionne même app fermée, sur navigateurs compatibles).
+    try {
+      if (self.navigator && 'setAppBadge' in self.navigator) {
+        if (typeof data.badgeCount === 'number' && data.badgeCount >= 0) {
+          if (data.badgeCount > 0) await self.navigator.setAppBadge(data.badgeCount);
+          else await self.navigator.clearAppBadge();
+        } else {
+          await self.navigator.setAppBadge();
+        }
+      }
+    } catch (e) {}
+  })());
 });
 
 self.addEventListener('notificationclick', function(event) {

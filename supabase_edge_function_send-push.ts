@@ -54,13 +54,40 @@ Deno.serve(async (req) => {
     });
     const subs = await res.json();
 
+    // Pour le badge sur l'icône : nombre de consignes non lues par agent destinataire.
+    let consignesList: any[] = [];
+    if (type === "consigne") {
+      const cRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/consignes?select=type,agentId,lus,dateExpiration`,
+        {
+          headers: {
+            apikey: SERVICE_ROLE_KEY,
+            Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+          },
+        }
+      );
+      consignesList = await cRes.json();
+    }
+    const now = new Date();
+    function unreadCountFor(agentId: string): number {
+      return (consignesList || []).filter((c: any) => {
+        if (c.dateExpiration && new Date(c.dateExpiration) < now) return false;
+        const relevant =
+          c.type === "générale" ||
+          (c.type === "individuelle" && String(c.agentId) === String(agentId));
+        if (!relevant) return false;
+        return !(c.lus && c.lus[agentId]);
+      }).length;
+    }
+
     const results = await Promise.allSettled(
-      (subs || []).map((s: any) =>
-        webpush.sendNotification(
+      (subs || []).map((s: any) => {
+        const badgeCount = type === "consigne" ? unreadCountFor(s.agentId) : undefined;
+        return webpush.sendNotification(
           { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
-          JSON.stringify({ title, body, type })
-        )
-      )
+          JSON.stringify({ title, body, type, badgeCount })
+        );
+      })
     );
 
     return new Response(
